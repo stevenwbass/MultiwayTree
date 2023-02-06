@@ -17,14 +17,14 @@
         public void AddChild(MultiwayTree<T> child)
         {
             child.Parent = this;
-            Children.AddFirst(child);
+            Children.AddLast(child);
         }
 
         public MultiwayTree<T> AddChild(T data)
         {
             var child = new MultiwayTree<T>(data);
             child.Parent = this;
-            Children.AddFirst(child);
+            Children.AddLast(child);
             return child;
         }
 

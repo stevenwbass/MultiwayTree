@@ -8,22 +8,37 @@ namespace KalorAform
 {
     public static class ExtensionMethods
     {
+        public enum TraversalType
+        {
+            InOrder, // depth-first
+            LevelOrder, // breadth-first
+            PostOrder, // depth-first
+            PreOrder // depth-first
+        }
+
         /// <summary>
-        /// Performs an iterative "PreOrder" traversal of the tree.
+        /// Performs an iterative traversal of the tree.
         /// As each node is visited, <paramref name="visitNodeAsync"/> is invoked with the <typeparamref name="T"/> Data property of the current node as a parameter.
         /// After each node is visited, <paramref name="exitEarlyAsync"/> is invoked with the result of <paramref name="visitNodeAsync"/> as a parameter.
-        /// If <paramref name="exitEarlyAsync"/> returns 'true', the traversal will cease and the last result from <paramref name="visitNodeAsync"/> is returned.
-        /// If all nodes are visited and <paramref name="exitEarlyAsync"/> returns 'false' for all nodes, <paramref name="allNodesVisitedResult"/> is returned.
         /// </summary>
-        /// <param name="node"></param>
-        /// <returns>Task<<typeparamref name="R"/>></returns>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="R"></typeparam>
+        /// <param name="tree"></param>
+        /// <param name="visitNodeAsync"></param>
+        /// <param name="exitEarlyAsync"></param>
+        /// <param name="allNodesVisitedResult"></param>
+        /// <returns>Either:
+        /// The result of the <paramref name="visitNodeAsync"/> invocation that resulted in <paramref name="exitEarlyAsync"/> returning true
+        /// OR <paramref name="allNodesVisitedResult"/></returns>
         public static async Task<R> TraverseAsync<T, R>(
-            this MultiwayTree<T> tree, 
+            this MultiwayTree<T> tree,
             Func<T, Task<R>> visitNodeAsync, 
             Func<R, Task<bool>> exitEarlyAsync, 
-            R allNodesVisitedResult
+            R allNodesVisitedResult,
+            TraversalType traversalType = TraversalType.LevelOrder
             ) where T: IEquatable<T>
         {
+            // TODO: this is preorder traversal, so refactor to reflect that and implement other traversal types
             var processStack = new Stack<MultiwayTree<T>>();
             processStack.Push(tree);
             while(processStack.Count > 0)

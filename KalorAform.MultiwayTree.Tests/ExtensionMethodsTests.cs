@@ -18,12 +18,12 @@ namespace KalorAform.MultiwayTree.Tests
             //              /|   |\
             //             3 4   5 6
             _testTree = new MultiwayTree<int>(0);
-            var firstChild = _testTree.AddChild(2);
-            firstChild.AddChild(6);
-            firstChild.AddChild(5);
-            var secondChild = _testTree.AddChild(1);
-            secondChild.AddChild(4);
-            secondChild.AddChild(3);
+            var firstChild = _testTree.AddChild(1);
+            firstChild.AddChild(3);
+            firstChild.AddChild(4);
+            var secondChild = _testTree.AddChild(2);
+            secondChild.AddChild(5);
+            secondChild.AddChild(6);
         }
 
         public class TraverseAsyncTests : ExtensionMethodsTests
