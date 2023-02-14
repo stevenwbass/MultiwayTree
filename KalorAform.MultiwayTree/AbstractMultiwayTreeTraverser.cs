@@ -1,9 +1,11 @@
-﻿namespace KalorAform.MultiwayTree
+﻿using System.Data.SqlTypes;
+
+namespace KalorAform.MultiwayTree
 {
     /// <summary>
     /// Extend this class with your strongly-typed <typeparamref name="T"/> corresponding to your <see cref="KalorAform.MultiwayTree"/>'s Data property type and your desired node visitation result <typeparamref name="TResult"/>.
     /// </summary>
-    public abstract class AbstractMultiwayTreeTraverser<T, TResult> : IMultiwayTreeTraverser<T, TResult> where T : IEquatable<T>
+    public abstract class AbstractMultiwayTreeTraverser<T, TResult> where T : IEquatable<T>
     {
         /// <summary>
         ///     Override this method in your implementation to define what happens when tree nodes are visited during traversal.
@@ -20,36 +22,39 @@
         /// <param name="nodeVisitsResult">
         ///     The result of visiting the current node.
         ///     Will be passed to the next invocation of VisitNodeAsync along with the next tree node's Data property.
-        ///     Note: Defaults to your <typeparamref name="TResult"/>'s default value (may be null).
+        ///     Note: Value property (your <typeparamref name="TResult"/>) may be null if TResult is nullable.
         /// </param>
         /// <returns>
         ///     Boolean indicating whether traversal should continue. 
         ///     Return true to continue traversing the tree or false to stop without visiting any more nodes.
         /// </returns>
-        public abstract Task<bool> VisitNodeAsync(T data, TResult nodeVisitsResult);
-
+        protected abstract Task<NodeVisitResult<TResult>> VisitNodeAsync(T data, NodeVisitResult<TResult> nodeVisitsResult);
 
         public Task<TResult> TraverseAsync(MultiwayTree<T> tree, TraversalType traversalType)
         {
             switch (traversalType)
             {
                 case TraversalType.LevelOrder:
-                    return DoBreadthFirstTraversal(tree);
+                    return DoLevelOrderTraversalAsync(tree);
                 case TraversalType.PreOrder:
-                    return DoPreOrderTraversal(tree);
+                    return DoPreOrderTraversalAsync(tree);
+                case TraversalType.PostOrder:
+                    return DoPostOrderTraversalAsync(tree);
+                case TraversalType.InOrder:
+                    return DoInOrderTraversalAsync(tree);
                 default:
                     throw new NotImplementedException();
             }
         }
 
-        private async Task<TResult> DoBreadthFirstTraversal(MultiwayTree<T> tree)
+        private async Task<TResult> DoLevelOrderTraversalAsync(MultiwayTree<T> tree)
         {
             var queue = new Queue<Tuple<int, MultiwayTree<T>>>();
 
             if (tree != null)
                 queue.Enqueue(new Tuple<int, MultiwayTree<T>>(0, tree));
 
-            TResult ret = default(TResult);
+            var nodeVisitResult = new NodeVisitResult<TResult>(true, default(TResult));
 
             while (queue.Count() > 0)
             {
@@ -57,28 +62,32 @@
                 var iLevel = queueItem.Item1;
                 var currentNode = queueItem.Item2;
 
-                if (await VisitNodeAsync(currentNode.Data, ret))
+                nodeVisitResult = await VisitNodeAsync(currentNode.Data, nodeVisitResult);
+
+                if (!nodeVisitResult.ContinueTraversing)
                     break;
 
                 foreach (var item in currentNode.Children)
                     queue.Enqueue(new Tuple<int, MultiwayTree<T>>(iLevel + 1, item));
             }
 
-            return ret;
+            return nodeVisitResult.Value;
         }
 
-        private async Task<TResult> DoPreOrderTraversal(MultiwayTree<T> tree)
+        private async Task<TResult> DoPreOrderTraversalAsync(MultiwayTree<T> tree)
         {
             var processStack = new Stack<MultiwayTree<T>>();
             processStack.Push(tree);
 
-            TResult ret = default(TResult);
+            var nodeVisitsResult = new NodeVisitResult<TResult>(true, default(TResult));
 
             while (processStack.Count > 0)
             {
                 var n = processStack.Pop();
 
-                if (!await VisitNodeAsync(n.Data, ret))
+                nodeVisitsResult = await (VisitNodeAsync(n.Data, nodeVisitsResult));
+
+                if (!nodeVisitsResult.ContinueTraversing)
                     break;
 
                 for (int i = n.Children.Count - 1; i >= 0; i--)
@@ -88,7 +97,17 @@
                 }
             }
 
-            return ret;
+            return nodeVisitsResult.Value;
+        }
+
+        private async Task<TResult> DoPostOrderTraversalAsync(MultiwayTree<T> tree)
+        {
+            throw new NotImplementedException();
+        }
+
+        private async Task<TResult> DoInOrderTraversalAsync(MultiwayTree<T> tree)
+        {
+            throw new NotImplementedException();
         }
     }
 }
