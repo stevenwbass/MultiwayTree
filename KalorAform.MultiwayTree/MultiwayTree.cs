@@ -1,4 +1,4 @@
-﻿namespace KalorAform
+﻿namespace KalorAform.MultiwayTree
 {
     public class MultiwayTree<T> where T : IEquatable<T>
     {
