@@ -107,10 +107,5 @@ namespace KalorAform.MultiwayTree.Tests
         {
             // TODO
         }
-
-        public class InOrderTests : AbstractMultiwayTreeTraverserTests
-        {
-            // TODO
-        }
     }
 }

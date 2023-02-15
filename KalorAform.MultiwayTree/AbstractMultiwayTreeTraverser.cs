@@ -1,4 +1,5 @@
-﻿using System.Data.SqlTypes;
+﻿using System.ComponentModel.Design.Serialization;
+using System.Data.SqlTypes;
 
 namespace KalorAform.MultiwayTree
 {
@@ -40,8 +41,6 @@ namespace KalorAform.MultiwayTree
                     return DoPreOrderTraversalAsync(tree);
                 case TraversalType.PostOrder:
                     return DoPostOrderTraversalAsync(tree);
-                case TraversalType.InOrder:
-                    return DoInOrderTraversalAsync(tree);
                 default:
                     throw new NotImplementedException();
             }
@@ -49,12 +48,12 @@ namespace KalorAform.MultiwayTree
 
         private async Task<TResult> DoLevelOrderTraversalAsync(MultiwayTree<T> tree)
         {
+            var nodeVisitResult = new NodeVisitResult<TResult>(true, default(TResult));
+
             var queue = new Queue<Tuple<int, MultiwayTree<T>>>();
 
             if (tree != null)
                 queue.Enqueue(new Tuple<int, MultiwayTree<T>>(0, tree));
-
-            var nodeVisitResult = new NodeVisitResult<TResult>(true, default(TResult));
 
             while (queue.Count() > 0)
             {
@@ -76,10 +75,10 @@ namespace KalorAform.MultiwayTree
 
         private async Task<TResult> DoPreOrderTraversalAsync(MultiwayTree<T> tree)
         {
+            var nodeVisitsResult = new NodeVisitResult<TResult>(true, default(TResult));
+
             var processStack = new Stack<MultiwayTree<T>>();
             processStack.Push(tree);
-
-            var nodeVisitsResult = new NodeVisitResult<TResult>(true, default(TResult));
 
             while (processStack.Count > 0)
             {
@@ -102,12 +101,44 @@ namespace KalorAform.MultiwayTree
 
         private async Task<TResult> DoPostOrderTraversalAsync(MultiwayTree<T> tree)
         {
-            throw new NotImplementedException();
-        }
+            var nodeVisitsResult = new NodeVisitResult<TResult>(true, default(TResult));
 
-        private async Task<TResult> DoInOrderTraversalAsync(MultiwayTree<T> tree)
-        {
-            throw new NotImplementedException();
+            var stack = new Stack<(MultiwayTree<T>, int)>();
+            var lastVisited = (tree, 0);
+            var currentNode = tree;
+            var index = 0;
+
+            while (stack.Count > 0 || currentNode != null)
+            {
+                if (currentNode != null)
+                {
+                    stack.Push((currentNode, index));
+                    index = 0;
+                    currentNode = (currentNode.Children.Count > 0 ? currentNode.Children.First() : null);
+                }
+                else
+                {
+                    var peeked = stack.Peek();
+                    var node = peeked.Item1;
+                    index = peeked.Item2;
+                    if (node.Children.Count > 1 && lastVisited.Item1 != node.Children.Last())
+                    {
+                        index = lastVisited.Item2 + 1;
+                        currentNode = node.Children.ElementAt(index);
+                    }
+                    else
+                    {
+                        nodeVisitsResult = await VisitNodeAsync(node.Data, nodeVisitsResult);
+
+                        if (!nodeVisitsResult.ContinueTraversing)
+                            break;
+
+                        lastVisited = (node, index);
+                        stack.Pop();
+                    }
+                }
+            }
+            return nodeVisitsResult.Value;
         }
     }
 }

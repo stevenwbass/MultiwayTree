@@ -2,9 +2,17 @@
 {
     public enum TraversalType
     {
-        InOrder, // depth-first
-        LevelOrder, // breadth-first
-        PostOrder, // depth-first
+        /// <summary>
+        /// Breadth-first. See unit tests (or wikipedia) for better understanding.
+        /// </summary>
+        LevelOrder,
+        /// <summary>
+        /// Depth-first. See unit tests (or wikipedia) for better understanding.
+        /// </summary>
+        PostOrder,
+        /// <summary>
+        /// Depth-first. See unit tests (or wikipedia) for better understanding.
+        /// </summary>
         PreOrder // depth-first
     }
 }
