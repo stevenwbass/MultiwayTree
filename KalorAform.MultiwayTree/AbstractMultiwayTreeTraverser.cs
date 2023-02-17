@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.Design.Serialization;
-using System.Data.SqlTypes;
-
-namespace KalorAform.MultiwayTree
+﻿namespace KalorAform.MultiwayTree
 {
     /// <summary>
     /// Extend this class with your strongly-typed <typeparamref name="T"/> corresponding to your <see cref="KalorAform.MultiwayTree"/>'s Data property type and your desired node visitation result <typeparamref name="TResult"/>.
@@ -22,12 +19,13 @@ namespace KalorAform.MultiwayTree
         /// </param>
         /// <param name="nodeVisitsResult">
         ///     The result of visiting the current node.
-        ///     Will be passed to the next invocation of VisitNodeAsync along with the next tree node's Data property.
-        ///     Note: Value property (your <typeparamref name="TResult"/>) may be null if TResult is nullable.
+        ///     <br/>Will be passed to the next invocation of VisitNodeAsync along with the next tree node's Data property.
+        ///     <br/>Note: Value property (your <typeparamref name="TResult"/>) may be null if TResult is nullable.
         /// </param>
         /// <returns>
-        ///     Boolean indicating whether traversal should continue. 
-        ///     Return true to continue traversing the tree or false to stop without visiting any more nodes.
+        ///     Boolean indicating whether traversal should continue. Behavior varies according to which type of traversal is being used.
+        ///     <br/>For "search-type" traversal e.g. LevelOrderSearch: Return true to continue searching the current branch of the tree or false to stop searching the current branch of the tree.
+        ///     <br/>For "normal" traversal e.g. PreOrder: Return true to continue traversing the tree or false to stop without visiting any more nodes.
         /// </returns>
         protected abstract Task<NodeVisitResult<TResult>> VisitNodeAsync(T data, NodeVisitResult<TResult> nodeVisitsResult);
 
@@ -41,12 +39,14 @@ namespace KalorAform.MultiwayTree
                     return DoPreOrderTraversalAsync(tree);
                 case TraversalType.PostOrder:
                     return DoPostOrderTraversalAsync(tree);
+                case TraversalType.LevelOrderSearch:
+                    return DoLevelOrderSearchTraversal(tree);
                 default:
                     throw new NotImplementedException();
             }
         }
 
-        private async Task<TResult> DoLevelOrderTraversalAsync(MultiwayTree<T> tree)
+        private async Task<TResult> DoLevelOrderTraversalAsync(MultiwayTree<T> tree, bool exitEarly = true)
         {
             var nodeVisitResult = new NodeVisitResult<TResult>(true, default(TResult));
 
@@ -64,13 +64,27 @@ namespace KalorAform.MultiwayTree
                 nodeVisitResult = await VisitNodeAsync(currentNode.Data, nodeVisitResult);
 
                 if (!nodeVisitResult.ContinueTraversing)
-                    break;
+                {
+                    if (exitEarly)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
 
                 foreach (var item in currentNode.Children)
                     queue.Enqueue(new Tuple<int, MultiwayTree<T>>(iLevel + 1, item));
             }
 
             return nodeVisitResult.Value;
+        }
+
+        private Task<TResult> DoLevelOrderSearchTraversal(MultiwayTree<T> tree)
+        {
+            return DoLevelOrderTraversalAsync(tree, false);
         }
 
         private async Task<TResult> DoPreOrderTraversalAsync(MultiwayTree<T> tree)

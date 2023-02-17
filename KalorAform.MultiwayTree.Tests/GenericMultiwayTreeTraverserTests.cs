@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
 using System.Threading.Tasks;
-using NUnit.Framework.Constraints;
 
 namespace KalorAform.MultiwayTree.Tests
 {
