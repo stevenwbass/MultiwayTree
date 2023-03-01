@@ -1,0 +1,11 @@
+- name: NuGet Publisher
+  # You may pin to the exact commit or the version.
+  # uses: Jacup/publish-nuget@0d7b0c6f119fadaf9c3e2bcfcbb3bf3a1c439864
+  uses: Jacup/publish-nuget@v2.6.0
+  with:
+    # Filepath of the project to be packaged, relative to root of repository
+    PROJECT_FILE_PATH: ./KalorAform.MultiwayTree/KalorAform.MultiwayTree.csproj
+    # NuGet package id, used for version detection & defaults to project name
+    PACKAGE_NAME: KalorAform.MultiwayTree
+    # API key to authenticate with NuGet server
+    NUGET_KEY: ${{ secrets.NUGET_API_KEY_FOR_MULTIWAYTREE }}
