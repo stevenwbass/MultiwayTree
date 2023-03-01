@@ -42,6 +42,7 @@ if [[ $REG_CURL_RESULT == *"BlobNotFound"* ]]; then
 		exit
 	elif  [[ $NUGET_PUSH_RESULT == *"409"* ]]; then
 		echo -e "${Y}The registration server lied to us. This version of the package already exists. If this is not expected, increment the version number.${D}"
+		exit
 	elif [[ $NUGET_PUSH_RESULT == *"File does not exist"* ]]; then
 		echo -e "${R}$NUGET_PUSH_RESULT"
 	else
