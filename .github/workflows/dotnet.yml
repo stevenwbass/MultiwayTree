@@ -26,11 +26,3 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
-    - name: Trigger next workflow
-      if: success()
-      uses: peter-evans/repository-dispatch@v1
-      with:
-        token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-        repository: ${{ github.repository }}
-        event-type: trigger-workflow-2
-        client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
