@@ -26,3 +26,9 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
+    - name: publish nuget package
+      if: success()
+      run: |
+         chmod +x ./nuget/publish.sh
+         ./nuget/publish.sh ${{ secrets.NUGET_API_KEY_FOR_MULTIWAYTREE }}
+      shell: bash

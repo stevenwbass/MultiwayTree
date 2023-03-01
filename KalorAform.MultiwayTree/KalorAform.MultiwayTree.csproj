@@ -10,6 +10,7 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/stevenwbass/MultiwayTree</RepositoryUrl>
     <PackageTags>tree;n-ary;k-ary;nary;kary;multiway;search;traversal;traverse;postorder;post-order;preorder;pre-order;levelorder;level-order</PackageTags>
+    <PackageOutputPath>$(OutputPath)</PackageOutputPath>
   </PropertyGroup>
 
   <ItemGroup>
