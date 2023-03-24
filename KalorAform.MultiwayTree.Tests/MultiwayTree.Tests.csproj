@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\KalorAform.MultiwayTree\KalorAform.MultiwayTree.csproj" />
+    <ProjectReference Include="..\KalorAform.MultiwayTree\MultiwayTree.csproj" />
   </ItemGroup>
 
 </Project>

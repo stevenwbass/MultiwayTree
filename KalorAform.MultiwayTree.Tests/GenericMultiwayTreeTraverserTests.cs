@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using System.Threading.Tasks;
 
-namespace KalorAform.MultiwayTree.Tests
+namespace MultiwayTree.Tests
 {
     public class GenericMultiwayTreeTraverserTests
     {

@@ -1,7 +1,7 @@
-﻿namespace KalorAform.MultiwayTree
+﻿namespace MultiwayTree
 {
     /// <summary>
-    /// Extend this class with your strongly-typed <typeparamref name="T"/> corresponding to your <see cref="KalorAform.MultiwayTree"/>'s Data property type and your desired node visitation result <typeparamref name="TResult"/>.
+    /// Extend this class with your strongly-typed <typeparamref name="T"/> corresponding to your <see cref="MultiwayTree"/>'s Data property type and your desired node visitation result <typeparamref name="TResult"/>.
     /// </summary>
     public abstract class AbstractMultiwayTreeTraverser<T, TResult> where T : IEquatable<T>
     {

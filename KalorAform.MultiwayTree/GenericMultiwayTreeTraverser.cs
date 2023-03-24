@@ -1,4 +1,4 @@
-﻿namespace KalorAform.MultiwayTree
+﻿namespace MultiwayTree
 {
     public class GenericMultiwayTreeTraverser<T, TResult> : AbstractMultiwayTreeTraverser<T, TResult> where T : IEquatable<T>
     {

@@ -1,4 +1,4 @@
-﻿namespace KalorAform.MultiwayTree
+﻿namespace MultiwayTree
 {
     public enum TraversalType
     {

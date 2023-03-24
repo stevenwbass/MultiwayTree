@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace KalorAform.MultiwayTree.Tests
+namespace MultiwayTree.Tests
 {
     public class TestNodeVisitResult
     {

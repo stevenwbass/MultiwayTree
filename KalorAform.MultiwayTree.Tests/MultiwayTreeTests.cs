@@ -1,7 +1,7 @@
 using NUnit.Framework;
-using KalorAform.MultiwayTree;
+using MultiwayTree;
 
-namespace KalorAform.Tests
+namespace Tests
 {
     public class MultiwayTreeTests
     {
