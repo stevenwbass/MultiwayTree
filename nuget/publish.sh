@@ -4,7 +4,7 @@ Y='\033[0;33m'   #'1;32' is Yellow's ANSI color code
 B='\033[0;34m'   #'0;34' is Blue's ANSI color code
 D='\033[0m'      #'0' is the ANSI color code for Default
 NUGET_URL="https://api.nuget.org/v3"
-PACKAGE_NAME="KalorAform.MultiwayTree"
+PACKAGE_NAME="MultiwayTree"
 
 NUGET_API_KEY=$1
 
