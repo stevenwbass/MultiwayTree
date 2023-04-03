@@ -51,7 +51,7 @@ namespace MultiwayTree.Tests
         [OneTimeSetUp]
         public void BuildTestTree()
         {
-            // Builds a tree that looks like this:
+            // Builds a 3-ary tree that looks like this:
             //               ____0_____
             //              /    |     \
             //             1     2     _3_

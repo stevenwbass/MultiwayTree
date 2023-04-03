@@ -17,8 +17,7 @@
         /// <summary>
         /// Breadth-first search. Basically the same as breadth-first search of a BST but on a k-ary tree. 
         /// Will only explore paths through the tree where ContinueTraversing is true on the NodeVisitResult returned by VisitNodeAsync.
-        /// Will _not_ 
-        /// See unit tests (and/or wikipedia BST) for better understanding.
+        /// See unit tests and README.md (and/or wikipedia BST) for better understanding.
         /// </summary>
         LevelOrderSearch
     }

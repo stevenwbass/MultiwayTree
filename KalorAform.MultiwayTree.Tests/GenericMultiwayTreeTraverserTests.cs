@@ -16,7 +16,7 @@ namespace MultiwayTree.Tests
         [OneTimeSetUp]
         public void BuildTestTree()
         {
-            // Builds a tree that looks like this:
+            // Builds a binary tree that looks like this:
             //                 0
             //                / \
             //               1   2

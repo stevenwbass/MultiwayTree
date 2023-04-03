@@ -59,6 +59,11 @@
             return false;
         }
 
+        /// <summary>
+        /// Convenience method. Invokes <see cref="ContainsNode(T)"/> using <paramref name="node"/>'s <see cref="Data"/> property.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
         public bool ContainsNode(MultiwayTree<T> node)
         {
             return ContainsNode(node.Data);
