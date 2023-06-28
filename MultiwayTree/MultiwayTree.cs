@@ -1,9 +1,11 @@
 ﻿namespace MultiwayTree
 {
+    [Newtonsoft.Json.JsonObject(Newtonsoft.Json.MemberSerialization.OptOut)]
     public class MultiwayTree<T> where T : IEquatable<T>
     {
         public T Data { get; private set; }
 
+        [Newtonsoft.Json.JsonIgnore]
         public MultiwayTree<T>? Parent { get; set; }
         public LinkedList<MultiwayTree<T>> Children { get; set; }
 

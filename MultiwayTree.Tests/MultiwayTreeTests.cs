@@ -1,5 +1,7 @@
 using NUnit.Framework;
 using MultiwayTree;
+using Newtonsoft.Json;
+using System;
 
 namespace Tests
 {
@@ -93,6 +95,18 @@ namespace Tests
         {
             var containsNode = _testTree.ContainsNode(new MultiwayTree<int>(6));
             Assert.IsTrue(containsNode);
+        }
+
+        [Test]
+        public void WhenTreeIsSerialized_JsonIsValid()
+        {
+            var multiwayTree = _testTree;
+            var json = JsonConvert.SerializeObject(multiwayTree);
+            var deserialized = JsonConvert.DeserializeObject<MultiwayTree<int>>(json);
+            var reserialized = JsonConvert.SerializeObject(deserialized);
+            Assert.That(deserialized != null);
+            Assert.That(!string.IsNullOrEmpty(json));
+            Assert.That(string.Equals(json, reserialized));
         }
     }
 }
